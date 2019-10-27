@@ -80,3 +80,33 @@ class HomePage extends StatelessWidget {
 }
 
 ```
+
+# Exemplo de get e post com dio
+```dart
+class HomeRepository {
+  final CustomDio dio;
+
+  HomeRepository(this.dio);
+
+  Future<List<PostModel>> getPosts() async {
+    try {
+      var response = await dio.client.get("/posts");
+      return (response.data as List)
+          .map((item) => PostModel.fromJson(item))
+          .toList();
+    } on DioError catch (e) {
+      throw (e.message);
+    }
+  }
+
+  Future<int> createPost(Map<String, dynamic> data) async {
+    try {
+      var response = await dio.client.post("/posts", data: data);
+      return response.statusCode;
+    } on DioError catch (e) {
+      throw (e.message);
+    }
+  }
+
+}
+```
